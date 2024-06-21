@@ -6,10 +6,9 @@
 # *****************************************************
 
 import socket
-import subprocess
 
 # The port on which to listen
-listenPort = 21
+listenPort = 1234
 
 # Create a welcome socket. 
 welcomeSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -27,58 +26,68 @@ welcomeSock.listen(1)
 # @param numBytes - the number of bytes to receive
 # @return - the bytes received
 # *************************************************
-def recvAll(sock: socket, numBytes):
+def recvAll(sock, numBytes):
 
 	# The buffer
-	recvBuff = ''
+	recvBuff = ""
+	
+	# The temporary buffer
+	tmpBuff = ""
 	
 	# Keep receiving till all is received
-	while recvBuff < str(numBytes):
+	while len(recvBuff) < numBytes:
 		
 		# Attempt to receive bytes
-		tmpBuff = sock.recv(1024)
+		tmpBuff =  sock.recv(numBytes)
 		
 		# The other side has closed the socket
 		if not tmpBuff:
 			break
 		
 		# Add the received bytes to the buffer
-		recvBuff += str(tmpBuff)
+		recvBuff += tmpBuff
 	
 	return recvBuff
 		
 # Accept connections forever
 while True:
 	
-	print("Waiting for connections...")
+	print "Waiting for connections..."
 		
 	# Accept connections
 	clientSock, addr = welcomeSock.accept()
 	
-	print("Accepted connection from client: ", addr)
-	print("\n")
-
-	# Receive the first 10 bytes indicating the
-	recBuff = b'0000000000'
+	print "Accepted connection from client: ", addr
+	print "\n"
 	
-	command = clientSock.recv(1024)
-
-	for line in subprocess.getstatusoutput(command):
-		clientSock.send(line.encode('utf-8'))
-
+	# The buffer to all data received from the
+	# the client.
+	fileData = ""
+	
+	# The temporary buffer to store the received
+	# data.
+	recvBuff = ""
+	
+	# The size of the incoming file
+	fileSize = 0	
+	
+	# The buffer containing the file size
+	fileSizeBuff = ""
+	
+	# Receive the first 10 bytes indicating the
 	# size of the file
-	fileSizeBuff = recvAll(clientSock, recBuff)
+	fileSizeBuff = recvAll(clientSock, 10)
 		
 	# Get the file size
-	fileSize = fileSizeBuff
+	fileSize = int(fileSizeBuff)
 	
-	print("The file size is ", fileSize)
+	print "The file size is ", fileSize
 	
 	# Get the file data
 	fileData = recvAll(clientSock, fileSize)
 	
-	print("The file data is: ")
-	print(fileData)
+	print "The file data is: "
+	print fileData
 		
 	# Close our side
 	clientSock.close()
