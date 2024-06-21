@@ -9,21 +9,24 @@ import socket
 import os
 import sys
 
+
 # Command line checks 
 if len(sys.argv) < 2:
-	print "USAGE python " + sys.argv[0] + " <FILE NAME>" 
+	print("USAGE python " + sys.argv[0] + " file.txt") 
 
 # Server address
 serverAddr = "localhost"
 
 # Server port
-serverPort = 1234
+serverPort = 21
 
 # The name of the file
-fileName = sys.argv[1]
+fileName = 'sendfile\\file.txt'
 
 # Open the file
 fileObj = open(fileName, "r")
+
+
 
 # Create a TCP socket
 connSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -66,14 +69,14 @@ while True:
 		
 		# Send the data!
 		while len(fileData) > numSent:
-			numSent += connSock.send(fileData[numSent:])
+			numSent += connSock.send(fileData[numSent:].encode('utf-8'))
 	
 	# The file has been read. We are done
 	else:
 		break
 
 
-print "Sent ", numSent, " bytes."
+print("Sent ", numSent, " bytes.")
 	
 # Close the socket and the file
 connSock.close()

