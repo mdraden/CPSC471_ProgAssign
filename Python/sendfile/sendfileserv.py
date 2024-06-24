@@ -53,8 +53,9 @@ def recvAll(sock: socket, numBytes):
 def handle_client_control(clientSock, addr):
 	print("Accepted connection from client: ", addr)
 
+
 	while True:
-		command = clientSock.recv(1024)
+		command = clientSock.recv(1024).decode("utf-8")
 		if command.startswith("ls"):
 			files = os.llistdir('.')
 			files_list = '\n'.join(files)
@@ -106,6 +107,13 @@ while True:
 	# Accept connections
 	clientSock, addr = welcomeSock.accept()
 	
+	handle_client_control(clientSock, addr)
+	
+
+
+
+
+"""
 	print("Accepted connection from client: ", addr)
 	print("\n")
 
@@ -133,4 +141,4 @@ while True:
 		
 	# Close our side
 	clientSock.close()
-	
+"""
