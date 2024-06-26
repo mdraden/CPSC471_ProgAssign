@@ -4,7 +4,7 @@ Jong Kevin Kim <br>
 Email: jkim3442@csu.fullerton.edu
 
 Mark Raden <br>
-Email: mraden@csu.fullerton.edu
+Email: mraden@csu.fullerton.edo
 
 (Add name and email address)
 
