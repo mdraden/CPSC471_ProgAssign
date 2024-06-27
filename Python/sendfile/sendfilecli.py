@@ -9,10 +9,10 @@ import socket
 import os
 import sys
 
-
 # Command line checks 
 if len(sys.argv) < 2:
-	print("USAGE python " + sys.argv[0] + " file.txt") 
+    print("USAGE python " + sys.argv[0] + " file.txt")
+    # sys.exit(1)
 
 # Server address
 serverAddr = "localhost"
@@ -23,10 +23,10 @@ serverPort = 21
 # The name of the file
 fileName = 'sendfile\\file.txt'
 
-# Open the file
-fileObj = open(fileName, "r")
-
-
+# Check if the file exists
+if not os.path.exists(fileName):
+    print(f"ERROR: {fileName} does not exist")
+    sys.exit(1)
 
 # Create a TCP socket
 connSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -34,53 +34,32 @@ connSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # Connect to the server
 connSock.connect((serverAddr, serverPort))
 
-# The number of bytes sent
-numSent = 0
+# Open the file in binary mode
+with open(fileName, "rb") as fileObj:
+    # Get the file size
+    fileObj.seek(0, os.SEEK_END)
+    fileSize = fileObj.tell()
+    fileObj.seek(0, os.SEEK_SET)
 
-# The file data
-fileData = None
+    # Prepare the size string and prepend it to the file data
+    dataSizeStr = f"{fileSize:<10}".encode('utf-8')
 
-# Keep sending until all is sent
-while True:
-	
-	# Read 65536 bytes of data
-	fileData = fileObj.read(65536)
-	
-	# Make sure we did not hit EOF
-	if fileData:
-		
-			
-		# Get the size of the data read
-		# and convert it to string
-		dataSizeStr = str(len(fileData))
-		
-		# Prepend 0's to the size string
-		# until the size is 10 bytes
-		while len(dataSizeStr) < 10:
-			dataSizeStr = "0" + dataSizeStr
-	
-	
-		# Prepend the size of the data to the
-		# file data.
-		fileData = dataSizeStr + fileData	
-		
-		# The number of bytes sent
-		numSent = 0
-		
-		# Send the data!
-		while len(fileData) > numSent:
-			numSent += connSock.send(fileData[numSent:].encode('utf-8'))
-	
-	# The file has been read. We are done
-	else:
-		break
+    # Send the size of the data
+    connSock.send(dataSizeStr)
 
+    # Keep sending until all is sent
+    while True:
+        # Read 65536 bytes of data
+        fileData = fileObj.read(65536)
+        
+        # If we hit EOF, break
+        if not fileData:
+            break
 
-print("Sent ", numSent, " bytes.")
-	
-# Close the socket and the file
+        # Send the file data
+        connSock.sendall(fileData)
+
+print("File sent successfully.")
+
+# Close the socket
 connSock.close()
-fileObj.close()
-	
-
-
