@@ -29,7 +29,7 @@ write client side start up here
 Once both are started up and connected you should be prompted with
 
 ```bash
-'Enter command (ls, get<file>, put<file>, quit):'
+'Enter command (ls, get<file>, put<file>, quit): '
 ```
 
 ### ls
@@ -38,11 +38,11 @@ Entering 'ls' will display the contents of the directory
 
 ### get \<file>
 
-Entering get \<file> will
+Entering get \<file> will have the server send the server the requested file and will show you if the file is successfully recieved and the amount of bytes recieved.
 
 ### put \<file>
 
-Entering put \<file> will
+Entering put \<file> will have the client send the server the requested file and will show you if the file is successfully recieved and the amount of bytes recieved.
 
 ### quit
 
