@@ -29,20 +29,20 @@ write client side start up here
 Once both are started up and connected you should be prompted with
 
 ```bash
-Enter command (ls, get<file>, put<file>, quit):
+'Enter command (ls, get<file>, put<file>, quit):'
 ```
 
 ### ls
 
 Entering 'ls' will display the contents of the directory
 
-### get <file>
+### get \<file>
 
-Entering get <file> will
+Entering get \<file> will
 
-### put <file>
+### put \<file>
 
-Entering put <file> will
+Entering put \<file> will
 
 ### quit
 
