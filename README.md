@@ -29,7 +29,23 @@ write client side start up here
 Once both are started up and connected you should be prompted with
 
 ```bash
-'Enter command (ls, get<file>, put)'
+Enter command (ls, get<file>, put<file>, quit):
 ```
+
+### ls
+
+Entering 'ls' will display the contents of the directory
+
+### get <file>
+
+Entering get <file> will
+
+### put <file>
+
+Entering put <file> will
+
+### quit
+
+Entering 'quit' will exit you from the program disconnect you from the socket.
 
 ## Notes
