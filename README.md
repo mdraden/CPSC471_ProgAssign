@@ -6,6 +6,9 @@ Email: jkim3442@csu.fullerton.edu
 Anthony Ortiz <br>
 Email: anthonyortiz7575@csu.fullerton.edu
 
+Audrey Hsu <br>
+Email: ahsu016@csu.fullerton.edu
+
 (Add name and email address)
 
 ## Programming Language(s)
