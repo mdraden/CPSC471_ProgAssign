@@ -14,4 +14,22 @@ Python
 
 ## How to Execute Program
 
+First you have to run the server side code. To do this in one terminal you can run:
+
+```bash
+write server side start up here
+```
+
+Afterwards you then can run the client side code. To do this you can do this in another terminal with:
+
+```bash
+write client side start up here
+```
+
+Once both are started up and connected you should be prompted with
+
+```bash
+'Enter command (ls, get<file>, put)'
+```
+
 ## Notes
